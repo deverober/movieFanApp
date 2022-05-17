@@ -44,6 +44,7 @@ app.use(function (err, req, res, next) {
 module.exports = app;
 
 /*
+TEST CHANGE
 const apiBaseUrl = 'http://api.themoviedb.org/3';
 const nowPlayingUrl = `${apiBaseUrl}/movie/now_playing?api_key=${apiKey}`;
 const imageBaseUrl = 'http://image.tmdb.org/t/p/w300';
