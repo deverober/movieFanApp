@@ -31,6 +31,11 @@ router.get('/movie/:id', (req, res) => {
   const thisMovieUrl = `${apiBaseUrl}/movie/${movieId}?api_key=${apiKey}`
 
   request.get(thisMovieUrl, (error, response, movieData) => {
+    if (error) {
+      res.render('error', error)
+      return
+    }
+
     const parsedData = JSON.parse(movieData)
 
     res.render('single-movie', {
@@ -39,4 +44,27 @@ router.get('/movie/:id', (req, res) => {
   })
 })
 
-module.exports = router;
+router.post('/search', (req, res) => {
+  const userSearchTerm = encodeURI(req.body.movieSearch)
+  const cat = req.body.cat
+  const movieUrl = `${apiBaseUrl}/search/${cat}?query=${userSearchTerm}&api_key=${apiKey}`
+
+  request.get(movieUrl, (error, response, movieData) => {
+    if (error) {
+      res.render('error', error)
+      return
+    }
+
+    let parsedData = JSON.parse(movieData)
+
+    if (cat === 'person') {
+      parsedData.results = parsedData.results[0].known_for
+    }
+
+    res.render('index', {
+      parsedData: parsedData.results
+    })
+  })
+})
+
+module.exports = router
